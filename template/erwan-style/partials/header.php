@@ -86,9 +86,9 @@
                                     <label class="btn bg-brown"><input type="radio" value="brown" autocomplete="off"></label>
                                 </div>
                             </div>
-                            <a href="index.php?p=login" class="dropdown-item"><?php echo __('Librarian LOGIN'); ?></a>
+                            <a href="index.php?p=login" class="dropdown-item"><?php echo __('Librarian Login'); ?></a>
                             <a href="index.php?p=visitor" class="dropdown-item"><?php echo __('Visitor Counter'); ?></a>
-                            <a class="dropdown-item" Target="blank" href="https://drive.google.com/drive/folders/0By2bteaK0FsxTHI2dTBLVmNscGc"><?php echo __('PANDUAN Upload Mandiri'); ?></a>
+                            <a class="dropdown-item" Target="blank" href="http://demomandiri.slimsetd.id/"><?php echo __('Demo Upload Mandiri'); ?></a>
 
                         </div>
                     </li>
