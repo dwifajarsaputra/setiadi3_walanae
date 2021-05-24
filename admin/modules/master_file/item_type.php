@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright (C) 2009  Arie Nugraha (dicarve@yahoo.com)
- * Modif by Dwi Fajar Saputra (Dudu ; dfsptra@gmail.com)
+ * Modif by Dwi Fajar Saputra (Dudu ; dfsptra@gmail.com) dan Jerry Permana (m.jerry152@gmail.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,34 +52,16 @@ if (!$can_read) {
 
 /* RECORD OPERATION */
 if (isset($_POST['saveData'])) {
-    $itemStatusID = strip_tags(trim($_POST['itemTypeID']));
-    $itemStatusName = strip_tags(trim($_POST['itemType']));
+    $itemCode = strip_tags(trim($_POST['itemTypeCode']));
+    $itemName = strip_tags(trim($_POST['itemType']));
     // check form validity
-    if (empty($itemTypeID) OR empty($itemStatusName)) {
+    if (empty( $itemCode) OR empty($itemName)) {
         utility::jsAlert(__('Item Type ID and Name can\'t be empty'));
         exit();
     } else {
-        $data['item_type_id'] = $dbs->escape_string($itemTypeID);
-        $data['item_type_name'] = $dbs->escape_string($itemTypeName);
-        // parsing rules
-		/*
-        $rules = '';
-        if (isset($_POST['rules']) AND !empty($_POST['rules'])) {
-            $rules = serialize($_POST['rules']);
-        } else {
-            $rules = 'literal{NULL}';
-        }
-		*/
-        $data['rules'] = 'literal{NULL}';
-		if (isset($_POST['rules']) AND !empty($_POST['rules'])) {
-			foreach ($_POST['rules'] as $rule) {
-				if ((integer)$rule == NO_LOAN_TRANSACTION) {
-					$data['no_loan'] = 1;
-				} else if ((integer)$rule == SKIP_STOCK_TAKE) {
-					$data['skip_stock_take'] = 1;
-				}
-			}
-		}
+        $data['item_type_code'] = $dbs->escape_string($itemCode);
+        $data['item_type_name'] = $dbs->escape_string($itemName);
+    
         $data['input_date'] = date('Y-m-d');
         $data['last_update'] = date('Y-m-d');
 
@@ -172,7 +154,7 @@ if (isset($_POST['detail']) OR (isset($_GET['action']) AND $_GET['action'] == 'd
     }
     /* RECORD FORM */
     $itemID = trim($dbs->escape_string(isset($_POST['itemID'])?$_POST['itemID']:''));
-    $rec_q = $dbs->query("SELECT * FROM mst_item_status WHERE item_status_id='$itemID'");
+    $rec_q = $dbs->query("SELECT * FROM mst_item_type WHERE item_type_id='$itemID'");
     $rec_d = $rec_q->fetch_assoc();
 
     // create new instance
@@ -197,18 +179,10 @@ if (isset($_POST['detail']) OR (isset($_GET['action']) AND $_GET['action'] == 'd
 
     /* Form Element(s) */
     // item status code
-    $form->addTextField('text', 'itemTypeID', __('Item Type Code').'*', $rec_d['item_type_id'], 'style="width: 20%;" maxlength="3"');
+    $form->addTextField('text', 'itemTypeCode', __('Item Type Code').'*', $rec_d['item_type_code'], 'style="width: 20%;" maxlength="3"');
     // item status name
     $form->addTextField('text', 'itemType', __('Item Type Name').'*', $rec_d['item_type_name'], 'style="width: 60%;"');
-    // item status rules
-	$rules = array();
-	if ($rec_d['no_loan']) {
-		$rules[] = NO_LOAN_TRANSACTION;
-	}
-	if ($rec_d['skip_stock_take']) {
-		$rules[] = SKIP_STOCK_TAKE;
-	}
-    $form->addCheckbox('rules', __('Rules'), $rules_option, $rules);
+  
 
     // edit mode messagge
     if ($form->edit_mode) {
@@ -225,11 +199,11 @@ if (isset($_POST['detail']) OR (isset($_GET['action']) AND $_GET['action'] == 'd
     $datagrid = new simbio_datagrid();
     if ($can_read AND $can_write) {
         $datagrid->setSQLColumn('ist.item_type_id',
-            'ist.item_type_id AS \''.__('Item Type Code').'\'',
+            'ist.item_type_code AS \''.__('Item Type Code').'\'',
             'ist.item_type_name AS \''.__('Item Type Name').'\'',
             'ist.last_update AS \''.__('Last Update').'\'');
     } else {
-        $datagrid->setSQLColumn('ist.item_type_id AS \''.__('Item Type Code').'\'',
+        $datagrid->setSQLColumn('ist.item_type_code AS \''.__('Item Type Code').'\'',
             'ist.item_type_name AS \''.__('Item Type Name').'\'',
             'ist.last_update AS \''.__('Last Update').'\'');
     }
